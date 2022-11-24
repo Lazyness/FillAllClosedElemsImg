@@ -15,7 +15,7 @@ public class Main {
             BufferedImage image = ImageIO.read(new File(
                     "src\\main\\resources\\img_ex\\figures_4.bmp"));
             Printable.printModifierPixels(Logic.getModifierBlackWhitePixels(Logic.getPixels(image)));
-            Logic.searchObjectImage();
+            Logic.searchObjectsOnImage();
             int[][] resultArrayPixels = Logic.fillImageColor();
             Printable.printModifierPixels(resultArrayPixels);
             Printable.printImageFromArray(resultArrayPixels);

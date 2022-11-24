@@ -1,6 +1,7 @@
 package prog.ua.logic;
 
 import prog.ua.exceptions.ExceptionNotFoundIndex;
+
 import java.awt.image.BufferedImage;
 import java.awt.image.PixelGrabber;
 import java.util.HashMap;
@@ -12,15 +13,12 @@ public class Logic {
     private static int[][] arrayPixel;
     private static final int COUNT_OBJECT = 3;
     private static HashMap<Integer, String>[] hashMapStoreContour;
+    private static int countObject = 1;
 
     private static void initializerHashMapArray() {
         hashMapStoreContour = new HashMap[COUNT_OBJECT];
         for (int i = 0; i < COUNT_OBJECT; i++)
             hashMapStoreContour[i] = new HashMap<>();
-    }
-
-    public static int[][] getArrayPixel() {
-        return arrayPixel;
     }
 
     public static int[] getPixels(BufferedImage image) {
@@ -52,7 +50,7 @@ public class Logic {
         return arrayPixel;
     }
 
-    public static boolean brokerContours(int i, int j, int countObject) throws ExceptionNotFoundIndex {
+    private static boolean brokerContours(int i, int j) throws ExceptionNotFoundIndex {
         if (countObject > 1) {
             int l = COUNT_OBJECT + 1 - countObject;
             for (int k = 0; k < hashMapStoreContour.length - l; k++) {
@@ -69,9 +67,38 @@ public class Logic {
         return true;
     }
 
-    public static void searchObjectImage() throws ExceptionNotFoundIndex {
+    private static int searchPixelContour(int constUpOrDown, int constLeftOrRight,
+                                          int upOrDown, int leftOrRight,
+                                          int counter, HashMap<Integer, String> hashMap) throws ExceptionNotFoundIndex {
+        if (arrayPixel[upOrDown][leftOrRight] == 1) { //вправо
+            if (counter > 1) {
+                if (searchEndSearch(constUpOrDown, constLeftOrRight, upOrDown, leftOrRight, hashMap)) return 0;
+                if (checkPixelInContour(upOrDown, leftOrRight, hashMap)) {
+                    arrayPixel[constUpOrDown][constLeftOrRight] = countObject;
+                    return 1;
+                }
+            } else {
+                return 1;
+            }
+        }
+        return -1; //направление не то
+    }
+
+    private static boolean searchEndSearch(int constUpOrDown, int constLeftOrRight,
+                                           int upOrDown, int leftOrRight, HashMap<Integer, String> hashMap) throws ExceptionNotFoundIndex {
+        if (returnIndex(hashMap.get(1), IndexEnum.FIRST) == upOrDown &&
+                returnIndex(hashMap.get(1), IndexEnum.SECOND) == leftOrRight) {
+            System.out.println("Contour is successful find!" + hashMap);
+            arrayPixel[constUpOrDown][constLeftOrRight] = countObject;
+            arrayPixel[upOrDown][leftOrRight] = countObject;
+            ++countObject;
+            return true;
+        }
+        return false;
+    }
+
+    public static void searchObjectsOnImage() throws ExceptionNotFoundIndex {
         initializerHashMapArray();
-        int countObject = 1;
         for (HashMap<Integer, String> hashMap : hashMapStoreContour) {
             int counter = 0;
             int j = 0;
@@ -81,106 +108,38 @@ public class Logic {
             while (i < arrayPixel.length) {
                 while (j < arrayPixel[i].length) {
                     //проверка на уже занятые пиксели
-                    if (brokerContours(i, j, countObject)) {
+                    if (brokerContours(i, j)) {
                         // установка курсора на начало контура
                         if (arrayPixel[i][j] == 1) {
                             hashMap.put(++counter, Integer.toString(i) + '|' + j);
-                            if (counter == 1) {
-                                if (arrayPixel[i][j + 1] == 1) {
-                                    j++;
-                                    continue;
-                                }
-//                                //влево
-                                if (arrayPixel[i][j - 1] == 1) {
-                                    j--;
-                                    continue;
-                                }
-//                                //вниз
-                                if (arrayPixel[i + 1][j] == 1) {
-                                    i++;
-                                    break;
-                                }
-//
-//                                //вверх
-                                if (arrayPixel[i - 1][j] == 1) {
-                                    i--;
-                                    break;
-                                }
-                            }
                             if (!flag) flag = true;
-                            if (counter > 1 && !hashMap.get(counter).equals(hashMap.get(counter - 1))) {
-//                                //вправо
-                                if (arrayPixel[i][j + 1] == 1
-                                ) {
-                                    if (returnIndex(hashMap.get(1), IndexEnum.FIRST) == i &&
-                                            returnIndex(hashMap.get(1), IndexEnum.SECOND) == j + 1) {
-                                        System.out.println("Contour is successful find!" + hashMap);
-                                        arrayPixel[i][j] = countObject;
-                                        arrayPixel[i][j + 1] = countObject;
-                                        ++countObject;
-                                        break FIRST;
-                                    }
-                                    if (checkPixelInContour(i, j + 1, hashMap)) {
-                                        arrayPixel[i][j] = countObject;
-                                        j++;
-                                        continue;
-                                    }
-                                }
 
-                                //вниз
-                                if (arrayPixel[i + 1][j] == 1
-                                ) {
-                                    if (returnIndex(hashMap.get(1), IndexEnum.FIRST) == i + 1 &&
-                                            returnIndex(hashMap.get(1), IndexEnum.SECOND) == j) {
-                                        System.out.println("Contour is successful find!" + hashMap);
-                                        arrayPixel[i][j] = countObject;
-                                        arrayPixel[i + 1][j] = countObject;
-                                        ++countObject;
-                                        break FIRST;
-                                    }
-                                    if (checkPixelInContour(i + 1, j, hashMap)) {
-                                        arrayPixel[i][j] = countObject;
-                                        i++;
-                                        break;
-                                    }
-                                }
+                            if (searchPixelContour(i, j, i, j + 1, counter, hashMap) == 0) { //right
+                                break FIRST;
+                            } else if (searchPixelContour(i, j, i, j + 1, counter, hashMap) == 1) {
+                                j++;
+                                continue;
+                            }
 
-                                //влево
-                                if (arrayPixel[i][j - 1] == 1
-                                ) {
-                                    if (returnIndex(hashMap.get(1), IndexEnum.FIRST) == i &&
-                                            returnIndex(hashMap.get(1), IndexEnum.SECOND) == j - 1) {
-                                        System.out.println("Contour is successful find!" + hashMap);
-                                        arrayPixel[i][j] = countObject;
-                                        arrayPixel[i][j - 1] = countObject;
-                                        ++countObject;
-                                        break FIRST;
-                                    }
-                                    if (checkPixelInContour(i, j - 1, hashMap)) {
-                                        arrayPixel[i][j] = countObject;
-                                        j--;
-                                        continue;
-                                    }
-                                }
+                            if (searchPixelContour(i, j, i + 1, j, counter, hashMap) == 0) { //down
+                                break FIRST;
+                            } else if (searchPixelContour(i, j, i + 1, j, counter, hashMap) == 1) {
+                                i++;
+                                continue;
+                            }
 
-                                //вверх
-                                if (arrayPixel[i - 1][j] == 1
-                                ) {
-                                    if (returnIndex(hashMap.get(1), IndexEnum.FIRST) == i - 1 &&
-                                            returnIndex(hashMap.get(1), IndexEnum.SECOND) == j) {
-                                        System.out.println("Contour is successful find!" + hashMap);
-                                        arrayPixel[i][j] = countObject;
-                                        arrayPixel[i - 1][j] = countObject;
-                                        ++countObject;
-                                        break FIRST;
-                                    }
-                                    if (checkPixelInContour(i - 1, j, hashMap)) {
-                                        arrayPixel[i][j] = countObject;
-                                        i--;
-                                        break;
-                                    }
+                            if (searchPixelContour(i, j, i, j - 1, counter, hashMap) == 0) { //left
+                                break FIRST;
+                            } else if (searchPixelContour(i, j, i, j - 1, counter, hashMap) == 1) {
+                                j--;
+                                continue;
+                            }
 
-                                }
+                            if (searchPixelContour(i, j, i - 1, j, counter, hashMap) == 0) { //up
+                                break FIRST;
+                            } else if (searchPixelContour(i, j, i - 1, j, counter, hashMap) == 1) {
+                                i--;
+                                continue;
                             }
                         }
                         if (!flag) j++;
@@ -194,7 +153,7 @@ public class Logic {
         }
     }
 
-    public static int returnIndex(String value, IndexEnum indexEnum) throws ExceptionNotFoundIndex {
+    private static int returnIndex(String value, IndexEnum indexEnum) throws ExceptionNotFoundIndex {
         String[] arrayIndex = value.split("\\|");
         switch (indexEnum) {
             case FIRST: {
@@ -209,7 +168,7 @@ public class Logic {
         }
     }
 
-    public static boolean checkPixelInContour(int varFuture1, int varFuture2, HashMap<Integer, String> hashMap) throws ExceptionNotFoundIndex {
+    private static boolean checkPixelInContour(int varFuture1, int varFuture2, HashMap<Integer, String> hashMap) throws ExceptionNotFoundIndex {
         for (int i = 1; i < hashMap.size(); i++) {
             if (varFuture1 == returnIndex(hashMap.get(i), IndexEnum.FIRST) &&
                     varFuture2 == returnIndex(hashMap.get(i), IndexEnum.SECOND)) return false;
@@ -217,6 +176,7 @@ public class Logic {
         return true;
     }
 
+    //можно сделать закраску другим путем (закрашивать послойно)
     public static int[][] fillImageColor() throws ExceptionNotFoundIndex {
         int[][] newArray = deepCopyArray();
         for (int q = 0; q < hashMapStoreContour.length; q++)
@@ -230,7 +190,7 @@ public class Logic {
         return newArray;
     }
 
-    public static int[][] deepCopyArray() {
+    private static int[][] deepCopyArray() {
         int[][] newArray = new int[height][width];
         for (int i = 0; i < newArray.length; i++)
             System.arraycopy(arrayPixel[i], 0, newArray[i], 0, newArray[i].length);
