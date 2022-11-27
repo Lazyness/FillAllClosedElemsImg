@@ -7,8 +7,12 @@
 of the constant to control the number of objects in the image in Logic class.
 4. To specify which image to read and process, you need to change the path to the image in the Main class `BufferedImage image = ImageIO.read(new File(
    "src\\main\\resources\\img_ex\\YOUR_IMAGE.bmp"));`.
+5. You must create image using pixels, the outline should be thin, 
+i.e. there should not be a situation where there are 4 pixels 
+like in the picture on the right. ![img.png](src/main/resources/img_for_git/rule.png)
+<br>In image u can see the desired pixel above, and below it does not match the rules.
+6. Code was updating, u can color any shapes in the image.
+7. If u find bag in code, tell me please 🙏
 ## Program testing
-### Result of running the program for 60 seconds
-Images is very small because 40*40 pixels.<br>
-![img.png](src/main/resources/img_ex/figures_4.bmp)
-![img_1.png](src/main/resources/img_res/result.png)
+![img.png](src/main/resources/img_for_git/testing_pic.png)
+![img_1.png](src/main/resources/img_for_git/result_test.png)
