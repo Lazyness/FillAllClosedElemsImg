@@ -14,5 +14,4 @@ like in the picture on the right. ![img.png](src/main/resources/img_for_git/rule
 6. Code was updating, u can color any shapes in the image.
 7. If u find bag in code, tell me please 🙏
 ## Program testing
-![img.png](src/main/resources/img_for_git/testing_pic.png)
-![img_1.png](src/main/resources/img_for_git/result_test.png)
+![img.png](src/main/resources/img_for_git/testing_pic.png) ![img_1.png](src/main/resources/img_for_git/result_test.png)
