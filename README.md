@@ -2,7 +2,6 @@
 
 ![Project Video](src/main/resources/img_for_git/test_work_app.gif)
 
-
 > This application receives a 40x40 black and white image of an 
 > .bmp format as input. 
 > During operation, 
