@@ -3,21 +3,21 @@ package prog.ua.prog.core.service.impl;
 import lombok.RequiredArgsConstructor;
 import prog.ua.prog.core.model.ImageInPixels;
 import prog.ua.prog.core.model.Point;
-import prog.ua.prog.core.service.ContourSearchService;
-import prog.ua.prog.core.service.ExtremePointsContourSortService;
+import prog.ua.prog.core.service.ContourSearching;
+import prog.ua.prog.core.service.ExtremePointsContourSorting;
 
 import java.util.*;
 
 @RequiredArgsConstructor
-public class ExtremePointsContourSorter implements ExtremePointsContourSortService {
+public class ExtremePointsContourSorter implements ExtremePointsContourSorting {
     private final ImageInPixels imageInPixels;
     private List<Point> listPoints;
     private List<List<Point>> listSortedPoint;
     private final Map<Integer, List<List<Point>>> mapListStartAndEndPointInContourObjects = new HashMap<>();
 
     public Map<Integer, List<List<Point>>> getMapListStartAndEndPointInContourObjects() {
-        ContourSearchService contourSearchService = new ContourSearch(imageInPixels);
-        Map<Integer, List<Point>> listSetPoints = contourSearchService.findContourObject();
+        ContourSearching contourSearching = new ContourSearch(imageInPixels);
+        Map<Integer, List<Point>> listSetPoints = contourSearching.findContourObject();
 
         for (Map.Entry<Integer, List<Point>> listEntry : listSetPoints.entrySet()) {
             listSortedPoint = new ArrayList<>();

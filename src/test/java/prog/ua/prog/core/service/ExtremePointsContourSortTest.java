@@ -24,8 +24,8 @@ class ExtremePointsContourSortTest {
         Assertions.assertArrayEquals(Util.getArrayFromString(Config.IMG_IN_PIXELS_NUM_5, imageInPixels), imageInPixels.getPixels());
 
         // Initialize the object to be tested
-        ExtremePointsContourSortService extremePointsContourSortService = new ExtremePointsContourSorter(imageInPixels);
-        Map<Integer, List<List<Point>>> invokeResult = extremePointsContourSortService.getMapListStartAndEndPointInContourObjects();
+        ExtremePointsContourSorting extremePointsContourSorting = new ExtremePointsContourSorter(imageInPixels);
+        Map<Integer, List<List<Point>>> invokeResult = extremePointsContourSorting.getMapListStartAndEndPointInContourObjects();
 
         // Write the Assert code
         Assertions.assertEquals(Config.mapListStartAndEndPointInContourObjects, invokeResult);

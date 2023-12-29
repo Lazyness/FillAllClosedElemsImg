@@ -5,7 +5,7 @@ import prog.ua.prog.core.exception.DanglingOutlineException;
 import prog.ua.prog.core.model.ImageInPixels;
 import prog.ua.prog.core.model.NavigateFlags;
 import prog.ua.prog.core.model.Point;
-import prog.ua.prog.core.service.ContourSearchService;
+import prog.ua.prog.core.service.ContourSearching;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +23,7 @@ import java.util.Map;
  * And do it until that time when u cannot find the new objects (matrix went to the end)
  */
 @RequiredArgsConstructor
-public final class ContourSearch implements ContourSearchService {
+public final class ContourSearch implements ContourSearching {
     private final ImageInPixels imageInPixels;
     private final NavigateFlags navigateFlags = new NavigateFlags();
     private final Map<Integer, List<Point>> listSetPoints = new HashMap<>();

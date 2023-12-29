@@ -23,9 +23,9 @@ class ContourSearchTest {
 
         Assertions.assertArrayEquals(Util.getArrayFromString(Config.IMG_IN_PIXELS_NUM_5, imageInPixels), imageInPixels.getPixels());
 
-        ContourSearchService contourSearchService = new ContourSearch(imageInPixels);
+        ContourSearching contourSearching = new ContourSearch(imageInPixels);
 
-        Map<Integer, List<Point>> listPoints = contourSearchService.findContourObject();
+        Map<Integer, List<Point>> listPoints = contourSearching.findContourObject();
 
         Assertions.assertNotNull(listPoints, "The contour points should not be null");
     }

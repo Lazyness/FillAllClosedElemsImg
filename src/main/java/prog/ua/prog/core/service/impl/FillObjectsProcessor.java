@@ -4,14 +4,14 @@ import lombok.RequiredArgsConstructor;
 import prog.ua.prog.core.model.ImageInPixels;
 import prog.ua.prog.core.model.NavigateFlags;
 import prog.ua.prog.core.model.Point;
-import prog.ua.prog.core.service.ExtremePointsContourSortService;
-import prog.ua.prog.core.service.FillObjectsProcessingService;
+import prog.ua.prog.core.service.ExtremePointsContourSorting;
+import prog.ua.prog.core.service.FillObjectsProcessing;
 
 import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
-public class FillObjectsProcessor implements FillObjectsProcessingService {
+public class FillObjectsProcessor implements FillObjectsProcessing {
     private final ImageInPixels imageInPixels;
 
     private void fillCell(Point startPoint, Point endPoint, int[][] imagePixels) {
@@ -24,9 +24,9 @@ public class FillObjectsProcessor implements FillObjectsProcessingService {
     public void fillObjectsOnImage() {
         int[][] imagePixels = imageInPixels.getPixels();
 
-        ExtremePointsContourSortService extremePointsContourSortService = new ExtremePointsContourSorter(imageInPixels);
+        ExtremePointsContourSorting extremePointsContourSorting = new ExtremePointsContourSorter(imageInPixels);
         Map<Integer, List<List<Point>>> mapListStartAndEndPointInContourObjects
-                = extremePointsContourSortService.getMapListStartAndEndPointInContourObjects();
+                = extremePointsContourSorting.getMapListStartAndEndPointInContourObjects();
         for (Map.Entry<Integer, List<List<Point>>> listEntryStartAndEndPointInObject : mapListStartAndEndPointInContourObjects.entrySet()) {
             List<List<Point>> listsOfPoints = listEntryStartAndEndPointInObject.getValue();
             for (List<Point> listsOfPoint : listsOfPoints) {

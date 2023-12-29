@@ -9,8 +9,8 @@ class ImageProcessorTest {
 
     @Test
     void createColorObjectsOnImgWithContours() {
-        ImageProcessingService imageProcessingService = new ImageProcessor();
-        assertDoesNotThrow(() -> imageProcessingService.createColorObjectsOnImgWithContours(
+        ImageProcessing imageProcessing = new ImageProcessor();
+        assertDoesNotThrow(() -> imageProcessing.createColorObjectsOnImgWithContours(
                 "src/main/resources/img_ex/figures_10.bmp",
                 "src/main/resources/img_res/result.bmp"));
     }
